@@ -4,10 +4,14 @@ import json
 app = Flask(__name__)
 
 
+def get_candidates(json_file):
+    with open(json_file, encoding='utf-8') as f:
+        return json.load(f)
+
+
 @app.route('/')
 def page_index():
-    with open("candidates.json", encoding='utf-8') as f:
-        candidates = json.load(f)
+    candidates = get_candidates("candidates.json")
 
     response_string = "<pre>"
     for candidate in candidates:
@@ -15,25 +19,42 @@ def page_index():
         response_string += f"Позиция кандидата {candidate['position']}<br>"
         response_string += f"Навыки через запятую {candidate['skills']}</a><br>"
         response_string += f"<br>"
-    response_string += "<pre>"
+    response_string += "</pre>"
     return response_string
 
 
 @app.route('/candidate/<int:candidate_id>/')
 def page_candidate(candidate_id):
-    with open("candidates.json", encoding='utf-8') as f:
-        candidates = json.load(f)
+    candidates = get_candidates("candidates.json")
 
     response_string = f"<pre>"
     for candidate in candidates:
         if candidate['id'] == candidate_id:
+            response_string += f"<img src=\"{candidate['picture']}\"<br><br>"
             response_string += f"Имя кандидата - {candidate['name']}<br>"
             response_string += f"Позиция кандидата {candidate['position']}<br>"
             response_string += f"Навыки через запятую {candidate['skills']}<br>"
             response_string += f"<br>"
             break
 
-    response_string += "<pre>"
+    response_string += "</pre>"
+    return response_string
+
+
+@app.route('/skill/<skill>/')
+def page_skill(skill):
+    candidates = get_candidates("candidates.json")
+
+    response_string = f"<pre>"
+    for candidate in candidates:
+        skills = candidate['skills'].split(",")
+        if skill in skills:
+            response_string += f"Имя кандидата - {candidate['name']}<br>"
+            response_string += f"Позиция кандидата {candidate['position']}<br>"
+            response_string += f"Навыки через запятую {candidate['skills']}<br>"
+            response_string += f"<br>"
+
+    response_string += f"</pre>"
     return response_string
 
 
