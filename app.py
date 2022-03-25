@@ -47,8 +47,8 @@ def page_skill(skill):
 
     response_string = f"<pre>"
     for candidate in candidates:
-        skills = candidate['skills'].split(",")
-        if skill in skills:
+        skills = candidate['skills'].lower().split(", ")
+        if skill.lower() in skills:
             response_string += f"Имя кандидата - {candidate['name']}<br>"
             response_string += f"Позиция кандидата {candidate['position']}<br>"
             response_string += f"Навыки через запятую {candidate['skills']}<br>"
