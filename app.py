@@ -29,11 +29,16 @@ def page_candidate(candidate_id):
 
     response_string = f"<pre>"
     for candidate in candidates:
+        skills = candidate['skills'].lower().split(", ")
+        skills_link = []
         if candidate['id'] == candidate_id:
             response_string += f"<img src=\"{candidate['picture']}\"<br><br>"
             response_string += f"Имя кандидата - {candidate['name']}<br>"
             response_string += f"Позиция кандидата {candidate['position']}<br>"
-            response_string += f"Навыки через запятую {candidate['skills']}<br>"
+            response_string += f"Навыки через запятую "
+            for skill in skills:
+                skills_link.append(f"<a href='/skill/{skill}/'>{skill}</a>")
+            response_string += ", ".join(skills_link)
             response_string += f"<br>"
             break
 
